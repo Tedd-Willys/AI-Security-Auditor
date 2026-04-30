@@ -1,81 +1,133 @@
-# AI-Driven Autonomous Security Auditor
+# AI Security Auditor Enterprise V2.1
 
-An AI-assisted cybersecurity reconnaissance and reporting tool that combines network scanning, threat intelligence checks, and LLM-based analysis to generate structured security audit reports.
+AI Security Auditor Enterprise V2.1 is an AI-assisted cybersecurity reconnaissance and reporting tool that combines Nmap service detection, public threat-intelligence enrichment, deterministic risk scoring, and LLM-assisted reporting.
 
-## Overview
+It is designed to reduce analyst workload by turning raw reconnaissance data into structured, evidence-based audit reports.
 
-This project automates early-stage security reconnaissance by collecting technical scan data, checking global threat intelligence sources, and using an LLM to convert raw findings into a readable security report.
+## What Changed in V2.1
 
-The tool currently supports:
+V2.1 improves the original notebook prototype by adding:
 
-- Domain/host reconnaissance
+- Safer target validation
+- DNS/IP safety checks
+- No hardcoded API keys
+- No shell=True command execution
 - Nmap service/version scanning
-- NSE-based vulnerability correlation
-- Threat intelligence checks using sources such as URLHaus, PhishTank, OpenPhish, AlienVault OTX, and CISA KEV
-- AI-generated executive security reports
-- Risk scoring and remediation guidance
+- CVE extraction from scan output
+- CISA Known Exploited Vulnerabilities correlation
+- Threat intelligence enrichment
+- Optional VirusTotal, AbuseIPDB, and Shodan enrichment
+- Deterministic risk scoring before AI analysis
+- Structured Markdown and JSON report output
+- AI prompts constrained to observed evidence
+- Ethical-use confirmation before scanning
 
-## Why I Built This
+## Why This Project Matters
 
-Security teams often deal with raw scanner output that requires manual interpretation before it becomes useful for decision-making. This project explores how AI can assist in transforming reconnaissance data into clearer, prioritized reports that connect technical findings to risk and remediation.
+Security analysts often receive noisy scanner output that still requires manual interpretation. This tool explores how AI can assist in security operations by converting raw scan data into clearer findings, risk drivers, and remediation priorities while keeping deterministic scoring separate from AI-generated narrative.
 
-## Features
+## Current Intelligence Sources
 
-- Automated Nmap scanning with service/version detection
-- Threat reputation checks against public intelligence feeds
-- CVE and exploitability-oriented analysis
-- AI-generated audit reports
-- Executive summary, attack surface analysis, and remediation roadmap
-- Basic input sanitization to reduce command injection risk
+Public/no-key sources:
 
-## Tech Stack
+- URLHaus
+- OpenPhish
+- PhishTank, where reachable
+- AlienVault OTX public endpoint
+- ThreatFox
+- CISA KEV
 
-- Python
-- Nmap / NSE scripts
-- OpenAI-compatible LLM API via OpenRouter
-- Llama-3 / GPT-style model orchestration
-- Public threat intelligence feeds
-- Google Colab / GitHub workflow
+Optional API-backed sources:
 
-## Example Workflow
+- VirusTotal
+- AbuseIPDB
+- Shodan
 
-1. User enters one or more target domains.
-2. The tool runs reconnaissance and vulnerability scanning.
-3. Threat intelligence feeds are checked for malicious reputation.
-4. Scan and intel data are passed to an LLM.
-5. A structured audit report is generated with risk scoring and remediation recommendations.
+The tool is built so unavailable or rate-limited feeds fail gracefully instead of breaking the audit.
 
-## Example Output Sections
+## Security Engineering Concepts Demonstrated
 
-- Executive Risk Score
-- Attack Surface Analysis
-- Vulnerability & CVE Correlation
-- Technical Exploitation Path
-- Immediate vs Strategic Remediation Plan
+- Attack surface discovery
+- Service/version enumeration
+- IOC and threat-intelligence enrichment
+- CVE extraction
+- Known-exploited vulnerability correlation
+- Deterministic risk scoring
+- Evidence-based remediation prioritization
+- Secure input handling
+- Command injection prevention
+- AI-assisted reporting with hallucination controls
 
-## Security & Ethical Use
+## Installation
 
-This project is intended for educational, defensive, and authorized security testing only. Do not scan systems without permission.
+System dependency:
 
-## Current Limitations
+    sudo apt-get update
+    sudo apt-get install -y nmap
 
-- AI-generated findings require human validation.
-- CVE correlation depends on scan accuracy and version detection.
-- Public threat intelligence feeds may be incomplete or unavailable.
-- The current implementation is a prototype and not a replacement for a full professional penetration test.
+Python dependencies:
+
+    pip install -r requirements.txt
+
+Environment variables:
+
+    export OPENROUTER_API_KEY="your_key_here"
+    export OPENROUTER_MODEL="meta-llama/llama-3-8b-instruct"
+
+Optional enrichment:
+
+    export VIRUSTOTAL_API_KEY="your_key_here"
+    export ABUSEIPDB_API_KEY="your_key_here"
+    export SHODAN_API_KEY="your_key_here"
+
+## Usage
+
+    python main.py
+
+Recommended first target:
+
+    scanme.nmap.org
+
+## Output
+
+Each audit creates:
+
+- A Markdown report for human review
+- A JSON report for automation or downstream processing
+
+Reports are saved under:
+
+    reports/
+
+## Ethical Use
+
+This project is for authorized security testing, defensive reconnaissance, academic work, and portfolio demonstration.
+
+Do not scan systems you do not own or do not have permission to assess.
+
+## Important Limitations
+
+This tool is not a replacement for a professional penetration test.
+
+- Nmap version detection can be imperfect.
+- Public feeds can be incomplete or rate-limited.
+- CVE matches require manual validation against exact versions.
+- LLM analysis must be reviewed by a human analyst.
+- Optional commercial/premium sources require user-provided API keys.
 
 ## Future Improvements
 
-- Add structured JSON output
-- Improve false-positive handling
-- Add severity scoring using CVSS/EPSS
-- Add report export to PDF/HTML
-- Add dashboard visualizations
-- Add authenticated scanning support
-- Improve safe target validation and scan scope controls
+- EPSS and CVSS enrichment
+- HTML/PDF report export
+- Dashboard view
+- Asset inventory mode
+- Better vulnerability deduplication
+- Authenticated scanning support
+- SIEM export format
+- Scan profiles for internal, external, and cloud assets
 
 ## Author
 
-Tedd Willys Handa Mulitani  
-MSc Information Technology - Cybersecurity  
+Tedd-Willys
+MSc Information Technology - Cybersecurity
 Carnegie Mellon University Africa
